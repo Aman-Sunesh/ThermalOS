@@ -655,7 +655,21 @@ real_layers = [
 mode_badge = pill("Hybrid demo", "amber") if synthetic_demo else pill("Real planning data", "green")
 city_cfg = city_config(city)
 city_role = str(city_cfg.get("transfer_role", provenance.get("transfer_role", "unspecified")))
-role_label = "Development city" if city_role == "development" else ("Prospective blind city" if city_role == "blind_test" else city_role.replace("_", " ").title())
+
+evaluation_labels = {
+    "miami": "Development city",
+    "houston": "Development city",
+    "phoenix": "Clean prospective blind",
+    "atlanta": "Post-blind v3.1 replay",
+    "los_angeles": "Post-blind v3.1 replay",
+    "las_vegas": "Post-blind follow-up",
+}
+
+role_label = evaluation_labels.get(
+    city,
+    city_role.replace("_", " ").title(),
+)
+
 city_badge = pill(role_label, "blue")
 basis_badge = pill("Conservative basis" if impact_basis == "conservative" else "Expected basis")
 
