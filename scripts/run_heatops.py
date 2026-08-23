@@ -6,6 +6,7 @@ from pathlib import Path
 
 import pandas as pd
 
+from thermalos.config import available_cities
 from thermalos.operations.heatops import plan_heatops
 
 
