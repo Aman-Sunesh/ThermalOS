@@ -978,21 +978,60 @@ with portfolio_tab:
 
 with frontier_tab:
     budgets = [500_000, 1_000_000, 2_000_000, 3_000_000, 4_000_000, 5_000_000]
-    curve = marginal_value_curve(
-        candidates,
-        budgets,
-        objective=objective,
-        impact_basis=impact_basis,
-        equity_min_fraction=equity_min,
-        enabled_interventions=enabled,
-        max_neighborhood_spend_fraction=max_neighborhood_fraction,
-        max_intervention_spend_fraction=max_intervention_fraction,
-        min_neighborhoods_served=min_neighborhoods,
+    frontier_key = f"budget_frontier_{city}"
+    frontier_signature = (
+        city,
+        objective,
+        impact_basis,
+        round(float(equity_min), 4),
+        tuple(sorted(enabled)),
+        round(float(max_neighborhood_fraction), 4),
+        round(float(max_intervention_fraction), 4),
+        int(min_neighborhoods),
     )
-    st.markdown("**How much direct project benefit becomes available as the capital envelope grows?**")
-    st.line_chart(curve.set_index("budget_usd")["first_order_person_hours_avoided"], height=340)
-    with st.expander("View frontier data"):
-        st.dataframe(curve, width="stretch", hide_index=True)
+
+    if st.button(
+        "Compute budget frontier",
+        key=f"compute_budget_frontier_{city}",
+        type="primary",
+    ):
+        with st.spinner("Solving portfolio across six capital budgets…"):
+            curve = marginal_value_curve(
+                candidates,
+                budgets,
+                objective=objective,
+                impact_basis=impact_basis,
+                equity_min_fraction=equity_min,
+                enabled_interventions=enabled,
+                max_neighborhood_spend_fraction=max_neighborhood_fraction,
+                max_intervention_spend_fraction=max_intervention_fraction,
+                min_neighborhoods_served=min_neighborhoods,
+            )
+            st.session_state[frontier_key] = {
+                "signature": frontier_signature,
+                "curve": curve,
+            }
+
+    frontier_payload = st.session_state.get(frontier_key)
+
+    if (
+        frontier_payload
+        and frontier_payload.get("signature") == frontier_signature
+    ):
+        curve = frontier_payload["curve"]
+        st.markdown(
+            "**How much direct project benefit becomes available as the capital envelope grows?**"
+        )
+        st.line_chart(
+            curve.set_index("budget_usd")["first_order_person_hours_avoided"],
+            height=340,
+        )
+        with st.expander("View frontier data"):
+            st.dataframe(curve, width="stretch", hide_index=True)
+    else:
+        st.info(
+            "Compute the budget frontier on demand to compare capital envelopes from $0.5M to $5M."
+        )
 
 with guardrail_tab:
     st.markdown(
