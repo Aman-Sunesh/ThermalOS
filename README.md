@@ -225,7 +225,7 @@ ThermalOS/
 ├── configs/
 ├── data/
 ├── docs/
-├── outputs/
+├── outputs/      # generated at runtime
 ├── scripts/
 ├── src/thermalos/
 └── tests/
