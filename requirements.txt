@@ -1,3 +1,4 @@
+-e .
 numpy>=1.26,<3
 pandas>=2.2,<3
 scipy>=1.13,<2
@@ -9,5 +10,4 @@ shapely>=2.0,<3
 streamlit>=1.40,<2
 pydeck>=0.9,<1
 joblib>=1.4,<2
-
 reportlab>=4.2,<5
