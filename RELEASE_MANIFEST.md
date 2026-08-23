@@ -2,7 +2,7 @@
 
 **Release:** `v1.0.0-hackathon`  
 **Frozen:** 2026-08-24 01:14 GST (UTC+4)  
-**Final pipeline SHA-256:** `80bbb90eb440e6fcce5ae8cb25fe264707b5157d90412d4a28fbfe6087e87eff`  
+**Frozen core decision-pipeline code/config SHA-256:** `80bbb90eb440e6fcce5ae8cb25fe264707b5157d90412d4a28fbfe6087e87eff`  
 **Pipeline files hashed:** 45  
 **Original pre-blind SHA-256:** `0fa780d55c29a4c152d5933bd072995c780389aad64e98e22d1f39b805e57204`
 
