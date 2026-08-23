@@ -12,7 +12,8 @@
 - Current-tree re-validation: **`compileall` passed**.
 - Prior frozen adversarial audit: **26/26 Feature Gauntlet checks passed**.
 - Prior frozen hard-stress audit: **0 hard failures; 6/6 city/system states valid**.
-- The post-freeze source edits were non-functional wording/comment cleanup only; decision logic, thresholds, data, optimization behavior, and scientific settings were unchanged.
+- The frozen scientific decision-pipeline code/config remains unchanged at the SHA above.
+- Subsequent repository changes were limited to UI, CLI, packaging, and documentation fixes outside the frozen pipeline set; decision logic, thresholds, processed evaluation data, optimization behavior, and frozen scientific settings were unchanged.
 - Invalid equity fractions are rejected.
 - Missing Atlanta GTFS fails the data contract.
 - Los Angeles zero-burden behavior returns an explicit no-action state.
