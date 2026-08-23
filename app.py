@@ -524,10 +524,19 @@ selectable_cities = [
     or (ROOT / "data" / "sample" / f"{c}_demo_tiles.csv").exists()
 ]
 city_labels = {}
+evaluation_labels = {
+    "miami": "development",
+    "houston": "development",
+    "phoenix": "clean prospective blind",
+    "atlanta": "post-blind v3.1 replay",
+    "los_angeles": "post-blind v3.1 replay",
+    "las_vegas": "post-blind follow-up",
+}
+
 for c in selectable_cities:
     ccfg = city_config(c)
     role = str(ccfg.get("transfer_role", "unspecified"))
-    suffix = "development" if role == "development" else ("blind test" if role == "blind_test" else role)
+    suffix = evaluation_labels.get(c, role.replace("_", " "))
     city_labels[c] = f"{ccfg.get('name', c)} ({suffix})"
 
 with st.sidebar:
