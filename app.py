@@ -1350,10 +1350,12 @@ with layer_tabs[6]:
         "ThermalOS therefore uses those diagnostics as a scientific guardrail rather than optimizing until a favorable cross-city score appears."
     )
 
-    manifest_path = ROOT / "outputs" / "generalization" / "freeze" / "thermalos_system_transfer_manifest.json"
-    if manifest_path.exists():
+    freeze_manifest = ROOT / "outputs" / "generalization" / "freeze" / "thermalos_system_transfer_manifest.json"
+    release_manifest = ROOT / "RELEASE_MANIFEST.json"
+
+    if freeze_manifest.exists():
         try:
-            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+            manifest = json.loads(freeze_manifest.read_text(encoding="utf-8"))
             snapshot = str(manifest.get("pipeline_snapshot_sha256", ""))
             st.success(f"Frozen v3 decision system • pipeline SHA256 {snapshot[:12]}…")
             st.caption(
@@ -1362,10 +1364,19 @@ with layer_tabs[6]:
             )
         except Exception:
             pass
+    elif release_manifest.exists():
+        try:
+            manifest = json.loads(release_manifest.read_text(encoding="utf-8"))
+            snapshot = str(manifest.get("final_pipeline_sha256", ""))
+            st.success(f"Frozen ThermalOS release • pipeline SHA256 {snapshot[:12]}…")
+            st.caption(
+                "The published release uses the frozen multi-state decision architecture, "
+                "data contract, robustness, policy, and evidence/provenance gates."
+            )
+        except Exception:
+            st.warning("Release manifest could not be read.")
     else:
-        st.info(
-            "Before opening Phoenix / Atlanta / Los Angeles, run `scripts/freeze_system_transfer.py` on the complete Miami/Houston development data."
-        )
+        st.warning("Release manifest unavailable.")
 
 st.markdown("<div class='tos-divider'></div>", unsafe_allow_html=True)
 st.caption("ThermalOS • Sense → Understand → Decide → Stress-test → Operate → Verify → Learn • observed thermal intelligence + frozen multi-state system transfer")
