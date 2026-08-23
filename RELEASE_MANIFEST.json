@@ -34,5 +34,5 @@
     "temporary diagnostics",
     "secrets/API keys"
   ],
-  "revalidation_note": "Post-freeze source edits were limited to non-functional wording/comments and did not alter decision logic, thresholds, data, optimization behavior, or scientific settings."
+  "revalidation_note": "The frozen scientific decision-pipeline code/config remains unchanged. Subsequent repository changes were limited to UI, CLI, packaging, and documentation fixes outside the frozen pipeline set; decision logic, thresholds, processed evaluation data, optimization behavior, and frozen scientific settings were unchanged."
 }
