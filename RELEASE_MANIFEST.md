@@ -53,4 +53,4 @@ FortyGuard supplies the observed upstream thermal field. ThermalOS does **not** 
 
 Do not distribute `.env`, `.venv*/`, caches, archived pre-v3.1 backups, temporary diagnostics, or API keys.
 
-Any code change after this freeze requires a new pipeline hash and re-validation.
+Any change to the frozen core decision-pipeline files requires a new core pipeline hash and scientific re-validation.
