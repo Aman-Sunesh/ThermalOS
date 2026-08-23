@@ -1,0 +1,70 @@
+interventions:
+  tree_canopy:
+    label: Tree canopy package
+    base_cost_usd: 65000
+    cost_jitter_fraction: 0.25
+    temp_effect_c_mean: 0.55
+    temp_effect_c_sd: 0.28
+    temp_effect_c_min: 0.1
+    temp_effect_c_max: 1.5
+    direct_exposure_relief_fraction: 0.1
+    spillover_sigma_m: 180
+    spillover_strength: 0.3
+    mechanism: shade_evapotranspiration
+  shade_structure:
+    label: Shade structure package
+    base_cost_usd: 95000
+    cost_jitter_fraction: 0.3
+    temp_effect_c_mean: 0.08
+    temp_effect_c_sd: 0.05
+    temp_effect_c_min: 0.0
+    temp_effect_c_max: 0.25
+    direct_exposure_relief_fraction: 0.32
+    spillover_sigma_m: 80
+    spillover_strength: 0.08
+    mechanism: radiant_exposure
+  cool_pavement:
+    label: Cool pavement package
+    base_cost_usd: 120000
+    cost_jitter_fraction: 0.25
+    temp_effect_c_mean: 0.15
+    temp_effect_c_sd: 0.1
+    temp_effect_c_min: 0.0
+    temp_effect_c_max: 0.5
+    direct_exposure_relief_fraction: 0.03
+    radiant_penalty_fraction: 0.03
+    spillover_sigma_m: 130
+    spillover_strength: 0.15
+    mechanism: surface_energy_balance
+  cool_roof:
+    label: Cool roof retrofit package
+    base_cost_usd: 110000
+    cost_jitter_fraction: 0.25
+    temp_effect_c_mean: 0.25
+    temp_effect_c_sd: 0.12
+    temp_effect_c_min: 0.05
+    temp_effect_c_max: 0.6
+    direct_exposure_relief_fraction: 0.02
+    spillover_sigma_m: 120
+    spillover_strength: 0.12
+    mechanism: building_surface_albedo
+  cooling_node:
+    label: Cooling / hydration node
+    base_cost_usd: 180000
+    cost_jitter_fraction: 0.2
+    temp_effect_c_mean: 0.0
+    temp_effect_c_sd: 0.0
+    temp_effect_c_min: 0.0
+    temp_effect_c_max: 0.0
+    direct_exposure_relief_fraction: 0.45
+    spillover_sigma_m: 220
+    spillover_strength: 0.05
+    mechanism: protected_exposure_capacity
+model:
+  duration_sensitivity_h_per_c: 1.5
+  monte_carlo_samples: 400
+  lower_quantile: 0.1
+  upper_quantile: 0.9
+  max_tile_relief_fraction: 0.85
+  vulnerable_threshold: 0.6
+  allow_observational_tree_calibration: false

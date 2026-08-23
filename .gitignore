@@ -1,1 +1,20 @@
+.env
+.venv*/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.DS_Store
 
+# Live/cached data and outputs
+data/cache/
+data/raw/
+data/interim/
+outputs/
+/models/
+
+# Keep shipped deterministic sample data
+!data/sample/
+!data/sample/**

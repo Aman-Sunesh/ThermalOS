@@ -1,0 +1,40 @@
+city_key: miami
+name: Miami-Dade County
+state: Florida
+fips_state: '12'
+fips_county: 086
+timezone: America/New_York
+granularity_m: 100
+study_date: '2025-07-15'
+threshold_c: 30.9
+areas:
+  Little_Havana:
+    lat: 25.765
+    lon: -80.219
+    width_km: 3.0
+  Hialeah:
+    lat: 25.8576
+    lon: -80.2781
+    width_km: 3.0
+  Kendall:
+    lat: 25.6793
+    lon: -80.3173
+    width_km: 3.0
+harvest:
+  snapshot_times:
+  - 09:00
+  - '14:00'
+  - '19:00'
+  include_daily: true
+  include_exceedance: true
+  include_persistence: true
+  include_environmental: true
+  satellite_samples_per_area: 15
+  streetview_samples_per_area: 0
+external:
+  tree_canopy_layer: https://gisweb.miamidade.gov/arcgis/rest/services/MD_TreeCanopy/MapServer/11
+  land_cover_service: https://gisweb.miamidade.gov/arcgis/rest/services/UrbanTreeCanopy/LandCover_2021/ImageServer
+  cooling_centers_layer: https://gis.miami.gov/gis/rest/services/EOC/Cooling_Centers/FeatureServer/0
+  public_schools_layer: https://arcgis.gdsc.miami.edu/arcgis/rest/services/mdc_public_schools/MapServer/1
+  gtfs_url: http://www.miamidade.gov/transit/googletransit/current/google_transit.zip
+transfer_role: development

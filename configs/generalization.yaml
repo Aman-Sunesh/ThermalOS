@@ -1,0 +1,95 @@
+protocol_version: "ThermalOS-v3-prospective-system-transfer-2026-08"
+status: "freeze the full decision pipeline before opening blind-city outcomes"
+
+# Houston has already been inspected, so both Miami and Houston are development data.
+development_cities:
+  - miami
+  - houston
+
+# Prospective cities. Once their outcomes are opened, do not tune/refit/reselect
+# the frozen pipeline and still describe those results as blind.
+blind_cities:
+  - phoenix
+  - atlanta
+  - los_angeles
+
+thermal_context:
+  role: >-
+    Observed-temperature-conditioned urban-form explanation and scenario context.
+    FortyGuard supplies the thermal field; ThermalOS does not replace it with a
+    morphology-only temperature forecaster.
+  universal_temperature_prediction_claim: false
+  morphology_only_transfer_status: "development diagnostic failed hotspot-ranking gates"
+  morphology_only_transfer_use: "diagnostic evidence only; never a blind-city success gate"
+  raw_lat_lon_allowed: false
+
+portable_morphology:
+  source: "FortyGuard satellite segmentation"
+  schema:
+    - fg_canopy_fraction
+    - fg_vegetation_fraction
+    - fg_pervious_fraction
+    - fg_impervious_fraction
+    - fg_building_fraction
+    - fg_road_fraction
+  city_local_layers_allowed_for_planning: true
+  city_local_layers_allowed_to_replace_portable_schema: false
+  note: >-
+    Portable morphology is used for intervention suitability, explanation, and
+    scenario context. City-local GIS can improve planning, but does not silently
+    redefine the cross-city data contract.
+
+satellite_sampling:
+  samples_per_area: 15
+  strategy: "temperature_spatial_maximin"
+  active_set_exact_per_area: true
+  uses_upstream_thermal_field_for_sample_design: true
+  note: >-
+    Sparse planning morphology proxy sampled from an already-observed FortyGuard
+    thermal field; not a claim that morphology alone forecasts temperature.
+
+# The prospective experiment now evaluates whether the unchanged ThermalOS
+# decision architecture ports across states, not whether sparse morphology can
+# reconstruct the upstream temperature provider.
+prespecified_blind_metrics:
+  data_contract:
+    - real_non_synthetic_data
+    - unique_tile_identity
+    - complete_thermal_field
+    - complete_population_exposure
+    - complete_vulnerability
+    - complete_portable_morphology
+    - registered_satellite_sampling
+  decision:
+    - candidate_generation_success
+    - milp_feasible
+    - budget_constraint_satisfied
+    - equity_constraint_satisfied
+  robustness:
+    - robustness_feasible_fraction
+    - portfolio_stability
+    - median_jaccard
+  policy:
+    - policy_scenarios_feasible_fraction
+    - equity_frontier_feasible_fraction
+  trust:
+    - evidence_ledger_layers
+    - evidence_min_coverage_pct
+
+# Gates are fixed before the three prospective cities are opened.
+gates:
+  required_data_contract_fraction_min: 1.0
+  budget_tolerance_usd: 1.0
+  equity_spend_fraction_min: 0.35
+  robustness_feasible_fraction_min: 1.0
+  policy_scenarios_feasible_fraction_min: 1.0
+  equity_frontier_feasible_fraction_min: 1.0
+  evidence_ledger_min_layers: 10
+  evidence_min_coverage_pct: 99.0
+
+claim_boundary: >-
+  Prospective transfer evaluates portability of the frozen ThermalOS data,
+  candidate-generation, optimization, robustness, policy, provenance, and
+  verification architecture. FortyGuard thermal intelligence remains an observed
+  upstream input. Intervention effects remain literature-bounded scenario priors,
+  not causal effects learned from development or blind cities.

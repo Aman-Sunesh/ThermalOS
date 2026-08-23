@@ -1,0 +1,31 @@
+fortyguard:
+  docs: https://docs-api.fortyguard.com/docs
+  quickstart: https://github.com/FortyGuard-Tech/temperature-api-quickstart
+  municipalities: https://www.fortyguard.com/governments-municipalities
+  role: primary hyperlocal thermal / environmental / segmentation source
+
+miami_dade:
+  tree_canopy: https://gisweb.miamidade.gov/arcgis/rest/services/MD_TreeCanopy/MapServer/11
+  land_cover_2m: https://gisweb.miamidade.gov/arcgis/rest/services/UrbanTreeCanopy/LandCover_2021/ImageServer
+  transit_open_data: https://www.miamidade.gov/global/transportation/open-data-feeds.page
+  extreme_heat: https://www.miamidade.gov/heat/
+  cooling_centers: https://gis.miami.gov/gis/rest/services/EOC/Cooling_Centers/FeatureServer/0
+
+houston:
+  metro_portal: https://api-portal.ridemetro.org/
+  metro_api_catalog: https://api-portal.ridemetro.org/apis
+  office_emergency_management: https://www.houstontx.gov/oem/
+  public_gis: https://mycity2.houstontx.gov/pubgis02/rest/services/HoustonMap
+  harc_heat_mapping: https://harcresearch.org/research/houston-harris-heat-action-team-h3at-mapping-campaign/
+  harc_forustree: https://harcresearch.org/research/community-resilience-through-urban-forestry/
+  note: active cooling-center status must be verified before treating a public facility as an operating cooling center
+
+census:
+  acs_2024_5year: https://api.census.gov/data/2024/acs/acs5.html
+  tigerweb: https://tigerweb.geo.census.gov/tigerwebmain/TIGERweb_restmapservice.html
+  note: CENSUS_API_KEY may be required by the current API
+
+research:
+  uhi_digital_twin_lifecycle_2026: https://doi.org/10.1016/j.scs.2026.107511
+  cdc_cooling_centers: https://www.cdc.gov/climate-health/media/pdfs/useofcoolingcenters.pdf
+  epa_heat_islands: https://www.epa.gov/heatislands

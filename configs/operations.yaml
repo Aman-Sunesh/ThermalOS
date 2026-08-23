@@ -1,0 +1,38 @@
+# OPERATIONAL PLANNING BUNDLES.
+# Costs are scenario assumptions for comparing dispatch strategies, not vendor quotes.
+actions:
+  hydration_station:
+    label: Hydration station
+    operating_cost_usd: 6000
+    direct_exposure_relief_fraction: 0.10
+    low_multiplier: 0.75
+    high_multiplier: 1.15
+    spillover_sigma_m: 140
+    spillover_strength: 0.05
+    mechanism: short-duration hydration and staffed relief point
+
+  temporary_shade:
+    label: Temporary shade deployment
+    operating_cost_usd: 9000
+    direct_exposure_relief_fraction: 0.18
+    low_multiplier: 0.75
+    high_multiplier: 1.15
+    spillover_sigma_m: 100
+    spillover_strength: 0.08
+    mechanism: temporary radiant-exposure protection
+
+  mobile_cooling:
+    label: Mobile cooling unit
+    operating_cost_usd: 18000
+    direct_exposure_relief_fraction: 0.26
+    low_multiplier: 0.70
+    high_multiplier: 1.10
+    spillover_sigma_m: 220
+    spillover_strength: 0.06
+    mechanism: relocatable cooled refuge / recovery capacity
+
+planning:
+  default_operating_budget_usd: 60000
+  vulnerable_threshold: 0.60
+  max_actions: 10
+  operating_window: "13:30-18:30"

@@ -1,0 +1,38 @@
+{
+  "project": "ThermalOS",
+  "release_version": "v1.0.0-hackathon",
+  "frozen_at_local": "2026-08-24T01:14:00+04:00",
+  "final_pipeline_sha256": "80bbb90eb440e6fcce5ae8cb25fe264707b5157d90412d4a28fbfe6087e87eff",
+  "pipeline_files_hashed": 45,
+  "original_pre_blind_pipeline_sha256": "0fa780d55c29a4c152d5933bd072995c780389aad64e98e22d1f39b805e57204",
+  "validation": {
+    "pytest": "33/33 PASS (current tree re-run)",
+    "compileall": "PASS (current tree re-run)",
+    "feature_gauntlet": "26/26 PASS (prior frozen adversarial audit; carried forward after non-functional wording/comment cleanup)",
+    "release_hard_stress": "0 hard failures; 6/6 city states valid (prior frozen audit; carried forward after non-functional wording/comment cleanup)"
+  },
+  "frozen_settings": {
+    "capital_budget_usd": 2000000,
+    "equity_floor": 0.35,
+    "robustness_worlds": 32,
+    "unseen_city_temperature_prediction_claim": false
+  },
+  "evaluation_roles": {
+    "miami": "development",
+    "houston": "development",
+    "phoenix": "clean prospective blind pass",
+    "atlanta": "blind city; final post-blind v3.1 replay after official GTFS import",
+    "los_angeles": "blind city; final post-blind v3.1 replay after explicit no-action handling",
+    "las_vegas": "post-blind follow-up"
+  },
+  "release_exclusions": [
+    ".env",
+    ".venv*/",
+    "__pycache__/",
+    ".pytest_cache/",
+    "outputs/release_archive/",
+    "temporary diagnostics",
+    "secrets/API keys"
+  ],
+  "revalidation_note": "Post-freeze source edits were limited to non-functional wording/comments and did not alter decision logic, thresholds, data, optimization behavior, or scientific settings."
+}

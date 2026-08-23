@@ -1,0 +1,30 @@
+{
+  "rows": 2496,
+  "neutral_imputed_fields": [],
+  "warning": "No neutral morphology fields were imputed; satellite-derived morphology remains a planning proxy.",
+  "city": "Phoenix / Maricopa County",
+  "source_file": "data\\interim\\phoenix_fortyguard_tiles.csv",
+  "synthetic_demo": false,
+  "enrichment": {
+    "environmental_samples": 3,
+    "satellite_samples": 45,
+    "tree_canopy": false,
+    "census_blockgroup_geography_2024": true,
+    "acs_blockgroups": true,
+    "acs_tracts": true,
+    "gtfs": true,
+    "cooling_centers": false,
+    "schools": false,
+    "independent_area_temperature_anchor": true,
+    "portable_morphology_source": "FortyGuard satellite segmentation; same feature definitions in every city",
+    "satellite_morphology_method": "same-AOI nearest valid sample; temperature+spatial maximin sampling; non-additive max of relevant FortyGuard class-cover metrics"
+  },
+  "coverage": {
+    "canopy_fraction_non_null_pct": 100.0,
+    "census_blockgroup_geoid_non_null_pct": 100.0,
+    "real_blockgroup_population_pct": 100.0,
+    "poverty_fraction_non_null_pct": 100.0,
+    "no_vehicle_fraction_non_null_pct": 100.0
+  },
+  "transfer_role": "blind_test"
+}

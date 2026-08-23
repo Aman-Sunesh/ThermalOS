@@ -1,0 +1,35 @@
+city_key: atlanta
+name: Atlanta / Fulton County
+state: Georgia
+fips_state: "13"
+fips_county: "121"
+timezone: America/New_York
+granularity_m: 100
+study_date: "2025-07-15"
+threshold_c: 32.0
+transfer_role: blind_test
+areas:
+  Downtown:
+    lat: 33.7490
+    lon: -84.3880
+    width_km: 3.0
+  West_End:
+    lat: 33.7350
+    lon: -84.4130
+    width_km: 3.0
+  Buckhead:
+    lat: 33.8390
+    lon: -84.3790
+    width_km: 3.0
+harvest:
+  snapshot_times: ["09:00", "14:00", "19:00"]
+  include_daily: true
+  include_exceedance: true
+  include_persistence: true
+  include_environmental: true
+  satellite_samples_per_area: 15
+  streetview_samples_per_area: 0
+external:
+  census_blockgroup_geography: "US Census TIGERweb ACS-2024 block groups"
+  acs_2024: "US Census ACS 2024"
+  transit_reference: "Operator-supplied verified static GTFS"
