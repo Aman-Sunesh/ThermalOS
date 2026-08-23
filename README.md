@@ -128,7 +128,7 @@ Negative controls also verify that:
 - HeatOps does not dispatch resources when heat burden is zero;
 - extreme adaptive-learning observations cannot move priors outside configured bounds.
 
-**Final ThermalOS pipeline SHA-256**
+**Frozen core decision-pipeline code/config SHA-256**
 
 ```text
 80bbb90eb440e6fcce5ae8cb25fe264707b5157d90412d4a28fbfe6087e87eff
