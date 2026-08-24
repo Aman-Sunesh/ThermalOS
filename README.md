@@ -1,5 +1,7 @@
 # ThermalOS
 
+### Live application: https://thermalos.streamlit.app/
+
 **AI operating system for urban heat resilience.**
 
 > Cities already know where it is hot. **ThermalOS tells them what to do about it.**
