@@ -26,7 +26,6 @@ from thermalos.learning import adaptive_calibration_status, update_intervention_
 from thermalos.models.interventions import build_candidates
 from thermalos.operations.heatops import plan_heatops
 from thermalos.optimization.portfolio import apply_portfolio_to_tiles, marginal_value_curve, optimize_portfolio
-from thermalos.reporting.dossier import build_dossier_pdf
 from thermalos.verification import build_verification_registry, evaluate_post_deployment
 
 ROOT = Path(__file__).resolve().parent
@@ -620,77 +619,115 @@ available_areas = sorted(tiles["area"].dropna().astype(str).unique().tolist()) i
 max_neighborhoods = max(1, len(available_areas))
 
 with st.sidebar:
-    budget_m = st.slider("Capital budget", 0.5, 5.0, 2.0, 0.1, format="$%.1fM")
-    budget = int(round(budget_m * 1_000_000))
+    with st.form(
+        key=f"planning_controls_{city}",
+        clear_on_submit=False,
+        border=False,
+    ):
+        budget_m = st.slider(
+            "Capital budget",
+            0.5,
+            5.0,
+            2.0,
+            0.1,
+            format="$%.1fM",
+        )
+        budget = int(round(budget_m * 1_000_000))
 
-    objective_label = st.selectbox(
-        "Planning objective",
-        ["Balanced", "Maximum Impact", "Maximum Equity", "Cost Efficiency"],
-    )
-    objective = objective_label.lower().replace(" ", "_")
+        objective_label = st.selectbox(
+            "Planning objective",
+            ["Balanced", "Maximum Impact", "Maximum Equity", "Cost Efficiency"],
+        )
+        objective = objective_label.lower().replace(" ", "_")
 
-    impact_basis_label = st.radio(
-        "Optimization basis",
-        ["Expected impact", "Conservative impact"],
-        index=0,
-        help=(
-            "Expected impact optimizes the modeled mean effect. Conservative impact optimizes the lower-bound effect estimate."
-        ),
-    )
-    impact_basis = "conservative" if impact_basis_label.startswith("Conservative") else "expected"
+        impact_basis_label = st.radio(
+            "Optimization basis",
+            ["Expected impact", "Conservative impact"],
+            index=0,
+            help=(
+                "Expected impact optimizes the modeled mean effect. "
+                "Conservative impact optimizes the lower-bound effect estimate."
+            ),
+        )
+        impact_basis = (
+            "conservative"
+            if impact_basis_label.startswith("Conservative")
+            else "expected"
+        )
 
-    equity_pct = st.slider(
-        "Minimum equity-aligned spend",
-        0,
-        70,
-        35,
-        5,
-        format="%d%%",
-        help="Minimum share of deployed capital required in high-vulnerability tiles.",
-    )
-    equity_min = equity_pct / 100.0
-
-    with st.expander("Policy guardrails", expanded=False):
-        max_neighborhood_pct = st.slider(
-            "Max budget / neighborhood",
-            20,
-            100,
-            100,
+        equity_pct = st.slider(
+            "Minimum equity-aligned spend",
+            0,
+            70,
+            35,
             5,
             format="%d%%",
-            help="Cap any one neighborhood at this share of the total available budget.",
+            help=(
+                "Minimum share of deployed capital required in "
+                "high-vulnerability tiles."
+            ),
         )
-        max_intervention_pct = st.slider(
-            "Max budget / intervention",
-            20,
-            100,
-            100,
-            5,
-            format="%d%%",
-            help="Cap any one intervention family at this share of the total available budget.",
-        )
-        min_neighborhoods = st.slider(
-            "Minimum neighborhoods served",
-            1,
-            max_neighborhoods,
-            1,
-            1,
-        )
-    max_neighborhood_fraction = max_neighborhood_pct / 100.0
-    max_intervention_fraction = max_intervention_pct / 100.0
+        equity_min = equity_pct / 100.0
 
-    with st.expander("Intervention palette", expanded=True):
-        all_int = list(intervention_specs.keys())
-        enabled = [
-            name
-            for name in all_int
-            if st.checkbox(
-                INTERVENTION_SHORT_LABELS.get(name, intervention_specs.get(name, {}).get("label", name)),
-                value=True,
-                key=f"enabled_{city}_{name}",
+        with st.expander("Policy guardrails", expanded=False):
+            max_neighborhood_pct = st.slider(
+                "Max budget / neighborhood",
+                20,
+                100,
+                100,
+                5,
+                format="%d%%",
+                help=(
+                    "Cap any one neighborhood at this share of the "
+                    "total available budget."
+                ),
             )
-        ]
-        st.caption(f"{len(enabled)} of {len(all_int)} intervention families enabled")
+            max_intervention_pct = st.slider(
+                "Max budget / intervention",
+                20,
+                100,
+                100,
+                5,
+                format="%d%%",
+                help=(
+                    "Cap any one intervention family at this share "
+                    "of the total available budget."
+                ),
+            )
+            min_neighborhoods = st.slider(
+                "Minimum neighborhoods served",
+                1,
+                max_neighborhoods,
+                1,
+                1,
+            )
+
+        max_neighborhood_fraction = max_neighborhood_pct / 100.0
+        max_intervention_fraction = max_intervention_pct / 100.0
+
+        with st.expander("Intervention palette", expanded=True):
+            all_int = list(intervention_specs.keys())
+            enabled = [
+                name
+                for name in all_int
+                if st.checkbox(
+                    INTERVENTION_SHORT_LABELS.get(
+                        name,
+                        intervention_specs.get(name, {}).get("label", name),
+                    ),
+                    value=True,
+                    key=f"enabled_{city}_{name}",
+                )
+            ]
+            st.caption(
+                f"{len(enabled)} of {len(all_int)} intervention families enabled"
+            )
+
+        st.form_submit_button(
+            "Optimize plan",
+            type="primary",
+            use_container_width=True,
+        )
 
     st.divider()
     st.caption(
@@ -773,27 +810,23 @@ else:
 # ThermalTwin is an observed-temperature-conditioned urban-form/context layer.
 # It is intentionally NOT used to calibrate causal intervention effects, and
 # ThermalOS does not claim sparse morphology can replace FortyGuard's thermal field.
-candidate_result = build_candidates(tiles, cfg)
-candidates = candidate_result.candidates
+candidates = cached_candidates(city).copy()
 
 with st.spinner("Solving constrained capital portfolio…"):
-    portfolio = optimize_portfolio(
-        candidates,
-        budget_usd=budget,
+    portfolio, selected, counter = cached_plan(
+        city=city,
+        budget_usd=int(budget),
         objective=objective,
         impact_basis=impact_basis,
-        equity_min_fraction=equity_min,
-        enabled_interventions=enabled,
-        max_neighborhood_spend_fraction=max_neighborhood_fraction,
-        max_intervention_spend_fraction=max_intervention_fraction,
-        min_neighborhoods_served=min_neighborhoods,
-    )
-    selected = explain_selected(portfolio.selected, tiles)
-    counter = apply_portfolio_to_tiles(
-        tiles,
-        selected,
-        max_relief_fraction=float(cfg["model"].get("max_tile_relief_fraction", 0.85)),
-        impact_basis=impact_basis,
+        equity_min_fraction=round(float(equity_min), 4),
+        enabled_interventions=tuple(sorted(enabled)),
+        max_neighborhood_spend_fraction=round(
+            float(max_neighborhood_fraction), 4
+        ),
+        max_intervention_spend_fraction=round(
+            float(max_intervention_fraction), 4
+        ),
+        min_neighborhoods_served=int(min_neighborhoods),
     )
 
 baseline = float(counter["baseline_person_hours"].sum())
@@ -1375,23 +1408,49 @@ with layer_tabs[5]:
         }
     registry_for_report = registry.projects if registry is not None else None
     city_name_for_report = city_config(city).get("name", city)
-    dossier_bytes = build_dossier_pdf(
-        city_name=city_name_for_report,
-        summary=current_summary,
-        selected=selected,
-        provenance=provenance,
-        evidence_ledger=ledger,
-        robustness_summary=robust_for_report,
-        verification_projects=registry_for_report,
+
+    dossier_key = f"dossier_bytes_{city}"
+    dossier_signature = (
+        scenario_signature,
+        bool(robust_for_report),
+        bool(registry_for_report is not None),
     )
-    st.download_button(
-        "Download decision dossier (PDF)",
-        data=dossier_bytes,
-        file_name=f"thermalos_{city}_decision_dossier.pdf",
-        mime="application/pdf",
-        key=f"download_dossier_{city}",
+
+    if st.button(
+        "Prepare decision dossier",
+        key=f"prepare_dossier_{city}",
         type="primary",
-    )
+    ):
+        with st.spinner("Building decision dossier…"):
+            from thermalos.reporting.dossier import build_dossier_pdf
+
+            dossier_bytes = build_dossier_pdf(
+                city_name=city_name_for_report,
+                summary=current_summary,
+                selected=selected,
+                provenance=provenance,
+                evidence_ledger=ledger,
+                robustness_summary=robust_for_report,
+                verification_projects=registry_for_report,
+            )
+            st.session_state[dossier_key] = {
+                "signature": dossier_signature,
+                "bytes": dossier_bytes,
+            }
+
+    dossier_payload = st.session_state.get(dossier_key)
+    if dossier_payload and dossier_payload.get("signature") == dossier_signature:
+        st.download_button(
+            "Download decision dossier (PDF)",
+            data=dossier_payload["bytes"],
+            file_name=f"thermalos_{city}_decision_dossier.pdf",
+            mime="application/pdf",
+            key=f"download_dossier_{city}",
+            type="primary",
+        )
+    else:
+        st.caption("Prepare the dossier on demand when you need the PDF.")
+    
     st.download_button(
         "Download evidence ledger (CSV)",
         data=ledger.to_csv(index=False).encode("utf-8"),
