@@ -74,7 +74,58 @@ def load_city(city: str) -> tuple[pd.DataFrame, dict]:
         }
 
     raise FileNotFoundError("Run `python scripts/build_demo_dataset.py` first.")
+    
 
+@st.cache_data(show_spinner=False)
+def cached_candidates(city: str) -> pd.DataFrame:
+    """Build deterministic intervention candidates once per city/process."""
+    city_tiles, _ = load_city(city)
+    return build_candidates(
+        city_tiles,
+        interventions_config(),
+    ).candidates
+
+
+@st.cache_data(show_spinner=False)
+def cached_plan(
+    city: str,
+    budget_usd: int,
+    objective: str,
+    impact_basis: str,
+    equity_min_fraction: float,
+    enabled_interventions: tuple[str, ...],
+    max_neighborhood_spend_fraction: float,
+    max_intervention_spend_fraction: float,
+    min_neighborhoods_served: int,
+):
+    """Cache the deterministic planning result for an exact UI scenario."""
+    city_tiles, _ = load_city(city)
+    local_cfg = interventions_config()
+    candidates = cached_candidates(city)
+
+    portfolio = optimize_portfolio(
+        candidates,
+        budget_usd=budget_usd,
+        objective=objective,
+        impact_basis=impact_basis,
+        equity_min_fraction=equity_min_fraction,
+        enabled_interventions=list(enabled_interventions),
+        max_neighborhood_spend_fraction=max_neighborhood_spend_fraction,
+        max_intervention_spend_fraction=max_intervention_spend_fraction,
+        min_neighborhoods_served=min_neighborhoods_served,
+    )
+
+    selected = explain_selected(portfolio.selected, city_tiles)
+    counter = apply_portfolio_to_tiles(
+        city_tiles,
+        selected,
+        max_relief_fraction=float(
+            local_cfg["model"].get("max_tile_relief_fraction", 0.85)
+        ),
+        impact_basis=impact_basis,
+    )
+
+    return portfolio, selected, counter
 
 def safe_float(value: object, default: float = 0.0) -> float:
     try:
