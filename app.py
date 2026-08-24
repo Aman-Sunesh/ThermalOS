@@ -7,7 +7,7 @@ from pathlib import Path
 import streamlit as st
 
 st.set_page_config(
-    page_title="ThermalOS",
+    page_title="ThermalOS — Urban Heat Decision Intelligence",
     page_icon="🌡️",
     layout="wide",
 )
