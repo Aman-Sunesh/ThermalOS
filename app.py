@@ -4,9 +4,16 @@ import html
 import json
 from pathlib import Path
 
+import streamlit as st
+
+st.set_page_config(
+    page_title="ThermalOS",
+    page_icon="🌡️",
+    layout="wide",
+)
+
 import pandas as pd
 import pydeck as pdk
-import streamlit as st
 
 from thermalos.analytics.policy_lab import run_policy_stress_lab
 from thermalos.analytics.robustness import run_robustness
@@ -21,8 +28,6 @@ from thermalos.operations.heatops import plan_heatops
 from thermalos.optimization.portfolio import apply_portfolio_to_tiles, marginal_value_curve, optimize_portfolio
 from thermalos.reporting.dossier import build_dossier_pdf
 from thermalos.verification import build_verification_registry, evaluate_post_deployment
-
-st.set_page_config(page_title="ThermalOS", page_icon="🌡️", layout="wide")
 
 ROOT = Path(__file__).resolve().parent
 
