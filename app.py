@@ -1008,7 +1008,7 @@ if valid_project_ids and chosen_project_id:
 
             b1, b2, b3, b4 = st.columns(4)
             vuln = safe_float(active.get("vulnerability"))
-            b1.metric("Vulnerability score", f"{vuln:.2f} / 1.00")
+            b1.metric("Vulnerability score", f"{vuln:.2f}")
             b1.caption(vulnerability_band(vuln))
             b2.metric("Hot duration", f"{safe_float(active.get('exceedance_h')):.1f} h")
             b3.metric("Tile burden", f"{safe_float(active.get('baseline_person_hours')):,.0f}")
