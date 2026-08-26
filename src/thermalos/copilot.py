@@ -139,7 +139,14 @@ def parse_copilot_command(text: str, current_state: dict | None = None) -> Copil
 
     if "maximum equity" in lower or "equity-first" in lower or "equity first" in lower:
         cmd.updates["objective"] = "maximum_equity"
-    elif "maximum impact" in lower or "impact-first" in lower or "impact first" in lower:
+    elif (
+        "maximum direct impact" in lower
+        or "maximum impact" in lower
+        or "direct-impact-first" in lower
+        or "direct impact first" in lower
+        or "impact-first" in lower
+        or "impact first" in lower
+    ):
         cmd.updates["objective"] = "maximum_impact"
     elif "cost efficiency" in lower or "cost-efficient" in lower or "cheapest" in lower:
         cmd.updates["objective"] = "cost_efficiency"
