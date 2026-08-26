@@ -48,7 +48,7 @@ def run_policy_stress_lab(
         area_count = int(candidates["area"].nunique()) if "area" in candidates else 1
     distributed_k = max(1, min(3, area_count))
     scenarios = {
-        "Impact-first": dict(
+        "Direct-impact-first": dict(
             objective="maximum_impact", impact_basis="expected", equity_min_fraction=0.0,
             max_neighborhood_spend_fraction=1.0, max_intervention_spend_fraction=1.0,
             min_neighborhoods_served=1,
