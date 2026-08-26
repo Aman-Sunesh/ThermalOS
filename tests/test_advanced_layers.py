@@ -43,7 +43,7 @@ def test_policy_stress_lab_runs_named_scenarios_and_frontier():
     tiles = _small_city("miami")
     candidates = build_candidates(tiles, interventions_config(), seed=5).candidates
     out = run_policy_stress_lab(candidates, budget_usd=500_000, area_count=3)
-    assert {"Impact-first", "Balanced", "Equity-first", "Distributed", "Conservative"}.issubset(set(out.scenarios["scenario"]))
+    assert {"Direct-impact-first", "Balanced", "Equity-first", "Distributed", "Conservative"}.issubset(set(out.scenarios["scenario"]))
     assert len(out.equity_frontier) >= 5
     assert (out.scenarios["spent_usd"] <= 500_000 + 1e-6).all()
 
