@@ -634,11 +634,22 @@ with st.sidebar:
         )
         budget = int(round(budget_m * 1_000_000))
 
+        objective_options = {
+            "Balanced": "balanced",
+            "Maximum Direct Impact": "maximum_impact",
+            "Maximum Equity": "maximum_equity",
+            "Cost Efficiency": "cost_efficiency",
+        }
         objective_label = st.selectbox(
             "Planning objective",
-            ["Balanced", "Maximum Impact", "Maximum Equity", "Cost Efficiency"],
+            list(objective_options),
+            help=(
+                "Maximum Direct Impact maximizes summed first-order modeled "
+                "project benefit. Spillover- and overlap-adjusted system-level "
+                "Digital Twin relief is reported separately."
+            ),
         )
-        objective = objective_label.lower().replace(" ", "_")
+        objective = objective_options[objective_label]
 
         impact_basis_label = st.radio(
             "Optimization basis",
@@ -852,7 +863,7 @@ policy_tone = "green" if (
     max_neighborhood_pct < 100 or max_intervention_pct < 100 or min_neighborhoods > 1 or equity_pct > 0
 ) else "neutral"
 chips = [
-    pill(f"{len(candidates):,} feasible candidates", "blue"),
+    pill(f"{len(candidates):,} generated candidates", "blue"),
     pill(f"{basis_text}"),
     pill(f"Equity floor {equity_pct}%", policy_tone),
     pill(f"≤ {max_neighborhood_pct}% / neighborhood", policy_tone),
@@ -1109,7 +1120,7 @@ with frontier_tab:
     ):
         curve = frontier_payload["curve"]
         st.markdown(
-            "**How much direct project benefit becomes available as the capital envelope grows?**"
+            "**How much first-order direct project benefit becomes available as the capital envelope grows?**"
         )
         st.line_chart(
             curve.set_index("budget_usd")["first_order_person_hours_avoided"],
@@ -1195,8 +1206,8 @@ with layer_tabs[0]:
         r1, r2, r3, r4 = st.columns(4)
         r1.metric("Portfolio stability", f"{100 * rob.portfolio_stability:.0f}%")
         r2.metric("Median set overlap", f"{100 * rob.median_jaccard:.0f}%")
-        r3.metric("Direct relief P10", f"{rob.direct_benefit_p10:,.0f}")
-        r4.metric("Direct relief P90", f"{rob.direct_benefit_p90:,.0f}")
+        r3.metric("First-order direct P10", f"{rob.direct_benefit_p10:,.0f}")
+        r4.metric("First-order direct P90", f"{rob.direct_benefit_p90:,.0f}")
         baseline_stability = rob.project_stability[rob.project_stability["baseline_selected"]].copy()
         if len(baseline_stability):
             baseline_stability["selection_stability_pct"] = (100 * baseline_stability["selection_frequency"]).round(0)
@@ -1204,6 +1215,10 @@ with layer_tabs[0]:
             stable_show["area"] = stable_show["area"].map(display_area)
             st.dataframe(stable_show.head(20), width="stretch", hide_index=True)
         st.caption(rob.method_note)
+        st.caption(
+            "P10/P90 are first-order direct project benefits; the Digital Twin "
+            "reports spillover- and overlap-adjusted system-level relief."
+        )
     elif robust_payload:
         st.info("The planning scenario changed. Re-run the robustness stress test to avoid showing stale stability results.")
     else:
@@ -1241,7 +1256,7 @@ with layer_tabs[1]:
         st.line_chart(frontier.set_index("equity_floor_pct")["direct_relief"], height=280)
         st.caption("A downward slope quantifies the modeled direct-benefit trade-off of increasing the required equity-aligned capital share.")
     else:
-        st.info("Run the lab to compare Impact-first, Balanced, Equity-first, Distributed, and Conservative planning philosophies at the same budget.")
+        st.info("Run the lab to compare Direct-impact-first, Balanced, Equity-first, Distributed, and Conservative planning philosophies at the same budget.")
 
 with layer_tabs[2]:
     st.markdown("**HeatOps — operational response for the current heat field**")
