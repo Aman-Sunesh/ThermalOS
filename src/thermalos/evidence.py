@@ -115,7 +115,17 @@ def evidence_summary(ledger: pd.DataFrame) -> dict:
     cls = ledger["evidence_class"].astype(str)
     return {
         "layers": int(len(ledger)),
-        "real_or_derived_layers": int(cls.isin(["Observed/model-derived upstream", "Observed GIS", "Observed schedule proxy", "Derived"]).sum()),
+
+        "real_or_derived_layers": int(
+            cls.isin([
+                "Observed/model-derived upstream",
+                "Observed GIS",
+                "Observed schedule proxy",
+                "Derived",
+                "Derived / proxy",
+            ]).sum()
+        ),
+        
         "modeled_layers": int((cls == "Modeled").sum()),
         "policy_assumptions": int((cls == "Policy assumption").sum()),
     }
